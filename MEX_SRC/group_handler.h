@@ -110,7 +110,7 @@ template<class M> double move(group_index & g, mwIndex node, const M & mod){
 
 
 //set up random engine
-std::default_random_engine generator((unsigned int)time(0));
+extern std::mt19937 generator;
 
 //move node to random group increasing modularity
 template<class M> double moverand(group_index & g, mwIndex node, const M & mod){

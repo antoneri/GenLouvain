@@ -1,4 +1,4 @@
-function [S,Q,n_it]=iterated_genlouvain(B,limit,verbose,randord,randmove,S0,postprocessor)
+function [S,Q,n_it]=iterated_genlouvain(B,limit,verbose,randord,randmove,S0,postprocessor,seed)
 % Optimise modularity-like quality function by iterating GenLouvain until convergence.
 % (i.e., until output partition does not change between two successive iterations)
 %
@@ -202,6 +202,10 @@ if nargin<7
     postprocessor=[];
 end
 
+if nargin<8
+    seed=[];
+end
+
 % verbose output switch
 if verbose
     mydisp = @(s) disp(s);
@@ -212,7 +216,7 @@ end
 S_old=[];
 n_it=1;
 mydisp('Iteration 1');
-[S,Q]=genlouvain(B,limit,verbose,randord,randmove,S0);
+[S,Q]=genlouvain(B,limit,verbose,randord,randmove,S0,seed);
 
 mydisp('');
 
@@ -222,11 +226,15 @@ while ~isequal(S,S_old)&&(Q-Q_old)>10*eps
     S_old=S;
     Q_old=Q;
 
+    if isscalar(seed)
+        seed = seed+1;
+    end
+
     mydisp(sprintf('Iteration %u',n_it));
     if ~isempty(postprocessor)
         S=postprocessor(S);
     end
-    [S,Q]=genlouvain(B,limit,verbose,randord,randmove,S);
+    [S,Q]=genlouvain(B,limit,verbose,randord,randmove,S,seed);
     mydisp(sprintf('Improvement in modularity: %f\n',Q-Q_old));
 end
 

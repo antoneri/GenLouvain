@@ -11,7 +11,7 @@ switch ext
         arraydims='-largeArrayDims';
 end
 mkdir('../private');
-setenv('CXXFLAGS',[getenv('CXXFLAGS'),' -std=c++11 -O4']);
+setenv('CXXFLAGS',[getenv('CXXFLAGS'),' -std=c++14 -O4']);
 if exist('OCTAVE_VERSION','builtin')
     mex -DOCTAVE -Imatlab_matrix metanetwork_reduce.cpp matlab_matrix/full.cpp matlab_matrix/sparse.cpp group_index.cpp
     mex -DOCTAVE -Imatlab_matrix group_handler.cpp matlab_matrix/full.cpp matlab_matrix/sparse.cpp group_index.cpp

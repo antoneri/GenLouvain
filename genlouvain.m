@@ -1,4 +1,4 @@
-function [S,Q] = genlouvain(B,limit,verbose,randord,randmove,S0)
+function [S,Q] = genlouvain(B,limit,verbose,randord,randmove,S0,seed)
 %GENLOUVAIN  Louvain-like community detection, specified quality function.
 %
 % Version: 2.2.0
@@ -205,6 +205,10 @@ end
 % set initial partition
 if nargin<6||isempty(S0)
     S0=[];
+end
+
+if nargin==7
+    group_handler('seed', seed);
 end
 
 %initialise variables and do symmetry check

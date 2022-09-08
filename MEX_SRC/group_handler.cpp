@@ -54,8 +54,17 @@ using namespace std;
 
 static group_index group;
 //switch on handle
-enum func {ASSIGN, MOVE, MOVERAND, MOVERANDW, RETURN};
-static const unordered_map<string, func> function_switch({ {"assign", ASSIGN}, {"move", MOVE}, {"moverand", MOVERAND}, {"moverandw", MOVERANDW}, {"return", RETURN} });
+enum func {ASSIGN, MOVE, MOVERAND, MOVERANDW, RETURN, SEED};
+static const unordered_map<string, func> function_switch({
+    {"assign", ASSIGN},
+    {"move", MOVE},
+    {"moverand", MOVERAND},
+    {"moverandw", MOVERANDW},
+    {"return", RETURN},
+    {"seed", SEED}
+});
+
+std::mt19937 generator((unsigned int)time(0));
 
 //group_handler(handle, varargin)
 void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
@@ -72,6 +81,15 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
                 
         if (function_switch.count(handle)) {
             switch (function_switch.at(handle)) {
+                case SEED: {
+                    if (nrhs!=2) {
+                        mexErrMsgIdAndTxt("group_handler:seed", "assign needs 1 input argument");
+                    }
+                    unsigned int seed = mxGetScalar(prhs[1]);
+                    generator.seed(seed);
+                    break;
+                }
+
                 case ASSIGN: {
                     if (nrhs!=2) {
                         mexErrMsgIdAndTxt("group_handler:assign", "assign needs 1 input argument");
